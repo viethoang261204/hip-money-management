@@ -9,7 +9,9 @@ services:
   - key: NODE_ENV
     value: production
   - key: DATABASE_URL
-    fromDatabase: hip-money-db
+    fromDatabase:
+      name: hip-money-db
+      property: connectionString
 
 databases:
 - name: hip-money-db
