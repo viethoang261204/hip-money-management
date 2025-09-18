@@ -8,10 +8,10 @@ services:
   envVars:
   - key: NODE_ENV
     value: production
-  - key: DATABASE_FILE
-    value: /data/data.sqlite
-  disk:
-    name: data
-    mountPath: /data
-    sizeGB: 1
+  - key: DATABASE_URL
+    fromDatabase: hip-money-db
+
+databases:
+- name: hip-money-db
+  plan: free
 
