@@ -64,10 +64,33 @@ app.use('/loans', loansRouter);
 app.use('/payments', paymentsRouter);
 app.use('/expenses', expensesRouter);
 
-// DB init and server start
-(async () => {
+// DB init and server start with retry (useful for Render Postgres cold starts)
+let serverStarted = false;
+async function startServer() {
+	await sequelize.authenticate();
 	await sequelize.sync();
-	app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
-})();
+	if (!serverStarted) {
+		app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
+		serverStarted = true;
+	}
+}
+
+async function startWithRetry(maxAttempts = 15, delayMs = 2000) {
+	for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+		try {
+			await startServer();
+			return;
+		} catch (err) {
+			console.error(`DB not ready (attempt ${attempt}/${maxAttempts}):`, err?.message || err);
+			if (attempt === maxAttempts) throw err;
+			await new Promise(r => setTimeout(r, delayMs));
+		}
+	}
+}
+
+startWithRetry().catch((err) => {
+	console.error('Failed to start after retries:', err);
+	process.exit(1);
+});
 
 
