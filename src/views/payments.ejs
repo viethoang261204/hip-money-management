@@ -1,0 +1,39 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+	<h3>Thanh toán</h3>
+<a class="btn btn-primary" href="/payments/new">Thêm thanh toán</a>
+<a class="btn btn-outline-secondary" href="/loans">Xem khoản</a>
+</div>
+
+<table class="table table-bordered table-striped">
+	<thead>
+		<tr>
+			<th>Ngày</th>
+			<th>Số tiền</th>
+			<th>Khoản</th>
+			<th>Người</th>
+			<th>Phương thức</th>
+			<th>Ghi chú</th>
+			<th style="width:180px">Hành động</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% payments.forEach(pm => { %>
+			<tr>
+				<td><%= pm.paidAt %></td>
+				<td><%= formatVND(pm.amount) %></td>
+				<td><a href="/loans/<%= pm.Loan.id %>">#<%= pm.Loan.id %></a></td>
+				<td><%= pm.Loan.Person ? pm.Loan.Person.name : '' %></td>
+				<td><%= pm.method || '' %></td>
+				<td><%= pm.note || '' %></td>
+				<td>
+					<a class="btn btn-sm btn-secondary" href="/payments/<%= pm.id %>/edit">Sửa</a>
+					<form method="POST" action="/payments/<%= pm.id %>?_method=DELETE" style="display:inline" onsubmit="return confirm('Xoá thanh toán này?')">
+						<button class="btn btn-sm btn-danger">Xoá</button>
+					</form>
+				</td>
+			</tr>
+		<% }) %>
+	</tbody>
+</table>
+
+

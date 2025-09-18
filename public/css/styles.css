@@ -1,0 +1,13 @@
+body { background: #f6f8fb; }
+.app-footer { box-shadow: 0 -0.25rem 0.75rem rgba(20,20,20,.06); }
+.app-has-fixed-footer { padding-bottom: 72px; }
+.card { box-shadow: 0 0.25rem 0.75rem rgba(20,20,20,.08); border: 0; }
+table th, table td { vertical-align: middle; }
+.table thead th { background: #f0f4f8; }
+.btn i { vertical-align: -0.125rem; }
+.badge { font-weight: 500; }
+.page-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; }
+.empty-state { text-align:center; padding:3rem 1rem; color:#6c757d; }
+.empty-state i { font-size: 2.5rem; }
+
+

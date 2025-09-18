@@ -1,0 +1,54 @@
+<div class="page-header">
+	<h3 class="mb-0"><i class="bi bi-bag-dash me-2"></i>Khoản chi tiêu</h3>
+	<a class="btn btn-primary" href="/expenses/new"><i class="bi bi-plus-lg me-1"></i>Thêm chi tiêu</a>
+</div>
+
+<div class="card mb-3">
+		<div class="card-body d-flex justify-content-between">
+			<div>Tổng chi: <strong><%= formatVND(total) %></strong></div>
+		<a class="btn btn-sm btn-outline-secondary" href="/">Về trang chủ</a>
+	</div>
+</div>
+
+<div class="card">
+	<div class="table-responsive">
+		<table class="table mb-0 align-middle">
+			<thead>
+				<tr>
+					<th>Ngày</th>
+					<th>Số tiền</th>
+					<th>Danh mục</th>
+					<th>Mô tả</th>
+					<th style="width:180px">Hành động</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% if (!expenses.length) { %>
+					<tr>
+						<td colspan="5">
+							<div class="empty-state"><i class="bi bi-emoji-neutral"></i><div>Chưa có chi tiêu nào</div></div>
+						</td>
+					</tr>
+				<% } %>
+				<% expenses.forEach(e => { %>
+					<tr>
+						<td><%= e.spentAt %></td>
+						<td><%= formatVND(e.amount) %></td>
+						<td><%= e.category || '' %></td>
+						<td><%= e.description || '' %></td>
+						<td class="text-nowrap">
+							<a class="btn btn-sm btn-outline-secondary" href="/expenses/<%= e.id %>/edit"><i class="bi bi-pencil-square me-1"></i>Sửa</a>
+							<form method="POST" action="/expenses/<%= e.id %>?_method=DELETE" style="display:inline">
+								<button class="btn btn-sm btn-outline-danger" data-confirm data-message="Xoá khoản chi này?">
+									<i class="bi bi-trash me-1"></i>Xoá
+								</button>
+							</form>
+						</td>
+					</tr>
+				<% }) %>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+

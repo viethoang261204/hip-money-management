@@ -1,0 +1,31 @@
+<h3><%= isEdit ? 'Sửa chi tiêu' : 'Thêm chi tiêu' %></h3>
+<form method="POST" action="<%= isEdit ? '/expenses/' + expense.id + '?_method=PUT' : '/expenses' %>">
+	<div class="row g-3">
+		<div class="col-md-3">
+			<label class="form-label">Ngày</label>
+			<input class="form-control" type="date" name="spentAt" value="<%= expense.spentAt || dayjs().format('YYYY-MM-DD') %>" required />
+		</div>
+		<div class="col-md-3">
+			<label class="form-label">Số tiền (VND)</label>
+			<input class="form-control vnd" name="amount" value="<%= formatVND(expense.amount) || '' %>" required />
+		</div>
+		<div class="col-md-3">
+			<label class="form-label">Danh mục</label>
+			<select class="form-select" name="category">
+				<% (expenseCategories || []).forEach(c => { %>
+					<option value="<%= c %>" <%= expense.category === c ? 'selected' : '' %>><%= c %></option>
+				<% }) %>
+			</select>
+		</div>
+		<div class="col-md-3">
+			<label class="form-label">Mô tả</label>
+			<input class="form-control" name="description" value="<%= expense.description || '' %>" />
+		</div>
+	</div>
+	<div class="mt-3 d-flex gap-2">
+		<button class="btn btn-primary" type="submit"><%= isEdit ? 'Cập nhật' : 'Tạo' %></button>
+		<a class="btn btn-secondary" href="/expenses">Huỷ</a>
+	</div>
+</form>
+
+

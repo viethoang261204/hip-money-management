@@ -1,0 +1,36 @@
+<h3><%= isEdit ? 'Sửa thanh toán' : 'Thêm thanh toán' %></h3>
+<form method="POST" action="<%= isEdit ? '/payments/' + payment.id + '?_method=PUT' : '/payments' %>">
+	<div class="row g-3">
+		<div class="col-md-6">
+			<label class="form-label">Khoản</label>
+			<select class="form-select" name="loanId" required>
+				<option value="">-- chọn --</option>
+				<% loans.forEach(l => { %>
+					<option value="<%= l.id %>" <%= (loanId == l.id || payment.loanId == l.id) ? 'selected' : '' %>>#<%= l.id %> - <%= l.Person ? l.Person.name : '' %> (<%= l.direction === 'lend' ? 'Cho vay' : 'Đi vay' %>)</option>
+				<% }) %>
+			</select>
+		</div>
+		<div class="col-md-3">
+			<label class="form-label">Ngày</label>
+			<input class="form-control" type="date" name="paidAt" value="<%= payment.paidAt || dayjs().format('YYYY-MM-DD') %>" required />
+		</div>
+		<div class="col-md-3">
+			<label class="form-label">Số tiền (VND)</label>
+			<input class="form-control vnd" name="amount" value="<%= formatVND(payment.amount) || '' %>" required />
+		</div>
+		<div class="col-md-6">
+			<label class="form-label">Phương thức</label>
+			<input class="form-control" name="method" value="<%= payment.method || '' %>" />
+		</div>
+		<div class="col-md-6">
+			<label class="form-label">Ghi chú</label>
+			<textarea class="form-control" name="note" rows="1"><%= payment.note || '' %></textarea>
+		</div>
+	</div>
+	<div class="mt-3 d-flex gap-2">
+		<button class="btn btn-primary" type="submit"><%= isEdit ? 'Cập nhật' : 'Tạo' %></button>
+		<a class="btn btn-secondary" href="/payments">Huỷ</a>
+	</div>
+</form>
+
+

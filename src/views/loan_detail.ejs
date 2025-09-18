@@ -1,0 +1,71 @@
+<div class="page-header">
+	<h3 class="mb-0"><i class="bi bi-receipt-cutoff me-2"></i>Chi tiết khoản</h3>
+	<div class="d-flex gap-2">
+		<a class="btn btn-outline-secondary" href="/loans/<%= loan.id %>/edit"><i class="bi bi-pencil-square me-1"></i>Sửa</a>
+		<a class="btn btn-primary" href="/payments/new?loanId=<%= loan.id %>"><i class="bi bi-plus-lg me-1"></i>Thêm thanh toán</a>
+		<a class="btn btn-outline-dark" href="/loans"><i class="bi bi-arrow-left me-1"></i>Quay lại</a>
+	</div>
+</div>
+
+<div class="card mb-4">
+	<div class="card-body">
+		<div class="row gy-2">
+			<div class="col-md-4"><strong>Người:</strong> <%= loan.Person ? loan.Person.name : '' %></div>
+			<div class="col-md-4"><strong>Loại:</strong> <span class="badge <%= loan.direction === 'lend' ? 'bg-success' : 'bg-warning text-dark' %>"><%= loan.direction === 'lend' ? 'Cho vay' : 'Đi vay' %></span></div>
+			<div class="col-md-4"><strong>Số tiền:</strong> <%= formatVND(loan.amount) %></div>
+			<div class="col-md-4"><strong>Đã trả:</strong> <%= formatVND(paid) %></div>
+			<div class="col-md-4"><strong>Còn lại:</strong> <%= formatVND(remaining) %></div>
+			<div class="col-md-4"><strong>Hạn:</strong> <%= loan.dueDate || '' %></div>
+			<div class="col-12">
+				<div class="progress" style="height: 10px;">
+					<div class="progress-bar <%= loan.direction === 'lend' ? 'bg-success' : 'bg-warning' %>" style="width: <%= percent %>%" aria-valuenow="<%= percent %>" aria-valuemin="0" aria-valuemax="100"></div>
+				</div>
+				<small class="text-muted"><%= percent %>% đã thanh toán</small>
+			</div>
+		</div>
+	</div>
+</div>
+
+<h5 class="mb-3">Lịch sử thanh toán</h5>
+<div class="card">
+<div class="table-responsive">
+<table class="table mb-0 align-middle">
+	<thead>
+		<tr>
+			<th>Ngày</th>
+			<th>Số tiền</th>
+			<th>Phương thức</th>
+			<th>Ghi chú</th>
+			<th style="width:180px">Hành động</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% if (!payments.length) { %>
+		<tr>
+			<td colspan="5">
+				<div class="empty-state"><i class="bi bi-emoji-neutral"></i><div>Chưa có thanh toán</div></div>
+			</td>
+		</tr>
+		<% } %>
+		<% payments.forEach(pm => { %>
+			<tr>
+				<td><%= pm.paidAt %></td>
+				<td><%= Number(pm.amount).toLocaleString() %></td>
+				<td><%= pm.method || '' %></td>
+				<td><%= pm.note || '' %></td>
+				<td>
+					<a class="btn btn-sm btn-outline-secondary" href="/payments/<%= pm.id %>/edit"><i class="bi bi-pencil-square me-1"></i>Sửa</a>
+					<form method="POST" action="/payments/<%= pm.id %>?_method=DELETE" style="display:inline">
+						<button class="btn btn-sm btn-outline-danger" data-confirm data-message="Xoá thanh toán này?">
+							<i class="bi bi-trash me-1"></i>Xoá
+						</button>
+					</form>
+				</td>
+			</tr>
+		<% }) %>
+	</tbody>
+</table>
+</div>
+</div>
+
+

@@ -1,0 +1,13 @@
+node_modules/
+.env
+npm-debug.log*
+yarn-error.log*
+
+# Local SQLite DB
+data.sqlite
+
+# Editor/OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,57 @@
+<div class="page-header">
+	<h3 class="mb-0"><i class="bi bi-cash-coin me-2"></i>Khoản vay/nợ</h3>
+	<a class="btn btn-primary" href="/loans/new"><i class="bi bi-plus-lg me-1"></i>Thêm khoản</a>
+</div>
+
+<div class="card">
+	<div class="table-responsive">
+		<table class="table mb-0 align-middle">
+			<thead>
+				<tr>
+					<th>Người</th>
+					<th>Loại</th>
+					<th>Số tiền</th>
+					<th>Tiến độ</th>
+					<th>Hạn</th>
+					<th style="width:260px">Hành động</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% if (!loans.length) { %>
+					<tr>
+						<td colspan="6">
+							<div class="empty-state"><i class="bi bi-emoji-neutral"></i><div>Chưa có khoản nào</div></div>
+						</td>
+					</tr>
+				<% } %>
+				<% loans.forEach(item => { const loan = item.loan; const paid = Number(item.paid); const total = Number(loan.amount); const remaining = Math.max(total - paid, 0); const percent = Number(item.percent || (total ? Math.round((paid / total) * 100) : 0)); %>
+					<tr>
+						<td><strong><%= loan.Person ? loan.Person.name : '' %></strong></td>
+						<td>
+							<span class="badge <%= loan.direction === 'lend' ? 'bg-success' : 'bg-warning text-dark' %>"><%= loan.direction === 'lend' ? 'Cho vay' : 'Đi vay' %></span>
+						</td>
+					<td><div><strong><%= formatVND(total) %></strong></div><small class="text-muted">Đã trả: <%= formatVND(paid) %></small></td>
+						<td style="min-width:220px">
+							<div class="progress" style="height: 10px;">
+								<div class="progress-bar <%= loan.direction === 'lend' ? 'bg-success' : 'bg-warning' %>" style="width: <%= percent %>%" aria-valuenow="<%= percent %>" aria-valuemin="0" aria-valuemax="100"></div>
+							</div>
+							<small class="text-muted"><%= percent %>% - Còn lại: <%= formatVND(remaining) %></small>
+						</td>
+						<td><%= loan.dueDate || '' %></td>
+						<td class="text-nowrap">
+							<a class="btn btn-sm btn-outline-info" href="/loans/<%= loan.id %>"><i class="bi bi-eye me-1"></i>Chi tiết</a>
+							<a class="btn btn-sm btn-outline-secondary" href="/loans/<%= loan.id %>/edit"><i class="bi bi-pencil-square me-1"></i>Sửa</a>
+							<form method="POST" action="/loans/<%= loan.id %>?_method=DELETE" style="display:inline">
+								<button class="btn btn-sm btn-outline-danger" data-confirm data-message="Xoá khoản này?">
+									<i class="bi bi-trash me-1"></i>Xoá
+								</button>
+							</form>
+						</td>
+					</tr>
+				<% }) %>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+
